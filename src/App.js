@@ -11,7 +11,7 @@ function App() {
 const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
 const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
 const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
-const [selectedCard, setCardSelected] = React.useState(false);
+const [selectedCard, setCardSelected] = React.useState(null);
 
 function handleEditAvatarClick() {
   setIsEditAvatarPopupOpen(true);
@@ -43,8 +43,8 @@ function closingPopupsByOverlay(evt) {
   closeAllPopups();
 }
 
-function handleCardClick() {
-  setCardSelected(true);
+function handleCardClick(card) {
+  setCardSelected(card);
 }
 
   return (
