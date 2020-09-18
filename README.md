@@ -20,4 +20,6 @@
 * верстку полей ввода,
 * работу с макетом в Figma.
 
+Адрес на git pages: https://seriojakarelin.github.io/mesto-react/
+
 Проект выполнил *Карелин Сергей*. 2020.
