@@ -1,31 +1,33 @@
 import React from 'react';
-import {userApi} from '../utils/Api.js'
+import Card from './Card.js';
+import {userApi, cardsApi} from '../utils/Api.js'
 
 function Main(props) {
 
     const [userName, setUserName] = React.useState('');
     const [userDescription, setUserDescription] = React.useState('');
     const [userAvatar, setUserAvatar] = React.useState('');
+    const [cards, setCards] = React.useState([]);
 
     React.useEffect(() => {
         userApi.getItems()
         .then(res => {
             setUserName(res.name);
-        })
-    }, []);
-
-    React.useEffect(() => {
-        userApi.getItems()
-        .then(res => {
             setUserDescription(res.about);
+            setUserAvatar(res.avatar);
+        })
+        .catch((err) => {
+            console.log(err);
         })
     }, []);
 
     React.useEffect(() => {
-        userApi.getItems()
-        .then(res => {
-            console.log(res)
-            setUserAvatar(res.avatar);
+        cardsApi.getItems()
+        .then(initialCards => {
+            setCards(initialCards);
+        })
+        .catch((err) => {
+            console.log(err);
         })
     }, []);
 
@@ -44,7 +46,13 @@ function Main(props) {
                 <button className="button profile__add-button" type="button" onClick={props.onAddPlace}></button>
             </section>
 
-            <ul className="gallery"></ul>
+            <ul className="gallery">
+                
+                {cards.map((card) =>
+                    <Card key={card._id} card={card} onCardClick={props.onCardClick} />
+                )}
+
+            </ul>
 
         </main>    
     )

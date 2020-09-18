@@ -11,6 +11,7 @@ function App() {
 const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = React.useState(false);
 const [isAddPlacePopupOpen, setIsAddPlacePopupOpen] = React.useState(false);
 const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
+const [selectedCard, setCardSelected] = React.useState(false);
 
 function handleEditAvatarClick() {
   setIsEditAvatarPopupOpen(true);
@@ -30,6 +31,8 @@ function closeAllPopups() {
   setIsEditProfilePopupOpen();
   setIsAddPlacePopupOpen();
   setIsEditAvatarPopupOpen();
+
+  setCardSelected();
 }
 
 function closingPopupsByOverlay(evt) {
@@ -38,6 +41,10 @@ function closingPopupsByOverlay(evt) {
   } 
 
   closeAllPopups();
+}
+
+function handleCardClick() {
+  setCardSelected(true);
 }
 
   return (
@@ -49,6 +56,7 @@ function closingPopupsByOverlay(evt) {
         onEditAvatar = {handleEditAvatarClick}
         onEditProfile = {handleEditProfileClick}
         onAddPlace = {handleAddPlaceClick}
+        onCardClick = {handleCardClick}
         />
 
         <PopupWithForm
@@ -87,6 +95,12 @@ function closingPopupsByOverlay(evt) {
           <span id="user-avatar-input-error" className="popup__input-error"></span>
           <button className="popup__submit-button popup__submit-button_type_avatar" type="submit">Сохранить</button>
         </PopupWithForm>
+
+        <PopupWithImage 
+          card = {selectedCard}
+          onClose = {closeAllPopups}
+          onCloseByOverlay = {closingPopupsByOverlay}>
+        </PopupWithImage>
 
         <Footer />
 
