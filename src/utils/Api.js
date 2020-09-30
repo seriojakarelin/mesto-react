@@ -72,7 +72,7 @@ class Api {
 }
 
 const userApi = new Api({
-    url: 'https://mesto.nomoreparties.co/v1/cohort-14/users/me', 
+    url: 'https://mesto.nomoreparties.co/v1/cohort-14/users/me/', 
     headers: {
         authorization: '3264da94-6a0d-46bd-9eaf-c8758f7396fd',
         'Content-Type': 'application/json'
@@ -80,11 +80,27 @@ const userApi = new Api({
 });
 
 const cardsApi = new Api({
-    url: 'https://mesto.nomoreparties.co/v1/cohort-14/cards', 
+    url: 'https://mesto.nomoreparties.co/v1/cohort-14/cards/', 
     headers: {
         authorization: '3264da94-6a0d-46bd-9eaf-c8758f7396fd',
         'Content-Type': 'application/json'
     }
 });
 
-export {userApi, cardsApi}
+const likeApi = new Api({
+    url: 'https://mesto.nomoreparties.co/v1/cohort-14/cards/likes/', 
+    headers: {
+        authorization: '3264da94-6a0d-46bd-9eaf-c8758f7396fd',
+        'Content-Type': 'application/json'
+    }
+});
+
+const userAvatarApi = new Api({
+    url: 'https://mesto.nomoreparties.co/v1/cohort-14/users/me/avatar', 
+    headers: {
+        authorization: '3264da94-6a0d-46bd-9eaf-c8758f7396fd',
+        'Content-Type': 'application/json'
+    }
+});
+
+export {userApi, cardsApi, likeApi, userAvatarApi}
