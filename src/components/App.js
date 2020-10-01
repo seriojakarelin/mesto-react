@@ -1,14 +1,14 @@
 import React from 'react';
-import Header from './components/Header.js';
-import Main from './components/Main.js';
-import Footer from './components/Footer.js';
-import PopupWithImage from './components/PopupWithImage.js';
-import EditProfilePopup from './components/EditProfilePopup.js';
-import EditAvatarPopup from './components/EditAvatarPopup.js';
-import AddPlacePopup from './components/AddPlacePopup.js';
-import {CurrentUserContext} from './contexts/CurrentUserContext.js';
-import {userApi, userAvatarApi, cardsApi, likeApi} from './utils/Api.js';
-import './index.css';
+import Header from './Header.js';
+import Main from './Main.js';
+import Footer from './Footer.js';
+import PopupWithImage from './PopupWithImage.js';
+import EditProfilePopup from './EditProfilePopup.js';
+import EditAvatarPopup from './EditAvatarPopup.js';
+import AddPlacePopup from './AddPlacePopup.js';
+import {CurrentUserContext} from '../contexts/CurrentUserContext.js';
+import {api} from '../utils/Api.js';
+import '../index.css';
 
 function App() {
 
@@ -20,7 +20,7 @@ const [currentUser, setCurrentUser] = React.useState('');
 const [cards, setCards] = React.useState([]);
 
 React.useEffect(() => {
-  cardsApi.getItems()
+  api.getCards()
   .then(initialCards => {
       setCards(initialCards);
   })
@@ -30,7 +30,7 @@ React.useEffect(() => {
 }, []);
 
 React.useEffect(() => {
-  userApi.getItems()
+  api.getUser()
   .then(res => {
       setCurrentUser(res);
   })
@@ -43,7 +43,7 @@ function handleCardLike(card) {
     const isLiked = card.likes.some(i => i._id === currentUser._id);
 
     if(!isLiked) {
-        likeApi.putItem(card)
+        api.addLike(card)
         .then((newCard) => {
           const newCards = cards.map((c) => c._id === card._id ? newCard : c);
           setCards(newCards);
@@ -52,7 +52,7 @@ function handleCardLike(card) {
             console.log(err);
         })
     } else {
-        likeApi.deleteItem(card._id)
+        api.deleteLike(card._id)
         .then((newCard) => {
           const newCards = cards.map((c) => c._id === card._id ? newCard : c);
           setCards(newCards);
@@ -68,7 +68,7 @@ function handleCardDelete(card) {
     const isDeletable = card.owner._id === currentUser._id;
 
     if (isDeletable) {
-        cardsApi.deleteItem(card._id)
+        api.deleteCard(card._id)
         .then((res) => {
           const newCards = cards.filter((c) => c._id !== card._id);
           setCards(newCards);
@@ -94,9 +94,9 @@ function handleAddPlaceClick() {
 }
 
 function closeAllPopups() {
-  setIsEditProfilePopupOpen();
-  setIsAddPlacePopupOpen();
-  setIsEditAvatarPopupOpen();
+  setIsEditProfilePopupOpen(false);
+  setIsAddPlacePopupOpen(false);
+  setIsEditAvatarPopupOpen(false);
 
   setCardSelected();
 }
@@ -114,39 +114,36 @@ function handleCardClick(card) {
 }
 
 function handleUpdateUser(newUser) {
-  userApi.changeItem(newUser)
+  api.changeUser(newUser)
   .then(res => {
       setCurrentUser(res);
+      closeAllPopups();
   })
   .catch((err) => {
       console.log(err);
   })
-
-  closeAllPopups();
 }
 
 function handleUpdateAvatar(newAvatar) {
-  userAvatarApi.changeItem(newAvatar)
+  api.changeAvatar(newAvatar)
   .then(res => {
       setCurrentUser(res);
+      closeAllPopups();
   })
   .catch((err) => {
       console.log(err);
   })
-
-  closeAllPopups();
 }
 
 function handleAddPlace(newCard) {
-  cardsApi.createItem(newCard)
+  api.createCard(newCard)
   .then(res => {
       setCards([res, ...cards]);
+      closeAllPopups();
   })
   .catch((err) => {
       console.log(err);
   })
-
-  closeAllPopups();
 }
 
   return (

@@ -4,8 +4,8 @@ class Api {
         this._headers = headers;
     }
 
-    getItems() {
-        return fetch(this._url, {
+    getUser() {
+        return fetch(`${this._url}users/me/`, {
             headers: this._headers
         })
         .then(res => {
@@ -16,11 +16,9 @@ class Api {
         })
     }
 
-    createItem(item) {
-        return fetch(this._url, {
-            method: 'POST',
-            headers: this._headers,
-            body: JSON.stringify(item)
+    getCards() {
+        return fetch(`${this._url}cards/`, {
+            headers: this._headers
         })
         .then(res => {
             if (res.ok) {
@@ -30,8 +28,47 @@ class Api {
         })
     }
 
-    changeItem(item) {
-        return fetch(this._url, {
+    addLike(item) {
+        return fetch(`${this._url}cards/likes/${item._id}`, {
+            method: 'PUT',
+            headers: this._headers,
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+            return Promise.reject(`Ошибка: ${res.status}`);
+        })
+    }
+
+    deleteLike(id) {
+        return fetch(`${this._url}cards/likes/${id}`, {
+            method: 'DELETE',
+            headers: this._headers,
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+            return Promise.reject(`Ошибка: ${res.status}`);
+        })
+    }
+
+    deleteCard(id) {
+        return fetch(`${this._url}cards/${id}`, {
+            method: 'DELETE',
+            headers: this._headers,
+        })
+        .then(res => {
+            if (res.ok) {
+                return res.json();
+            }
+            return Promise.reject(`Ошибка: ${res.status}`);
+        })
+    }
+
+    changeUser(item) {
+        return fetch(`${this._url}users/me/`, {
             method: 'PATCH',
             headers: this._headers,
             body: JSON.stringify(item)
@@ -44,10 +81,11 @@ class Api {
         })
     }
 
-    deleteItem(id) {
-        return fetch(`${this._url}${id}`, {
-            method: 'DELETE',
+    changeAvatar(item) {
+        return fetch(`${this._url}users/me/avatar/`, {
+            method: 'PATCH',
             headers: this._headers,
+            body: JSON.stringify(item)
         })
         .then(res => {
             if (res.ok) {
@@ -57,10 +95,11 @@ class Api {
         })
     }
 
-    putItem(item) {
-        return fetch(`${this._url}${item._id}`, {
-            method: 'PUT',
+    createCard(item) {
+        return fetch(`${this._url}cards/`, {
+            method: 'POST',
             headers: this._headers,
+            body: JSON.stringify(item)
         })
         .then(res => {
             if (res.ok) {
@@ -71,36 +110,12 @@ class Api {
     }
 }
 
-const userApi = new Api({
-    url: 'https://mesto.nomoreparties.co/v1/cohort-14/users/me/', 
+const api = new Api({
+    url: 'https://mesto.nomoreparties.co/v1/cohort-14/', 
     headers: {
         authorization: '3264da94-6a0d-46bd-9eaf-c8758f7396fd',
         'Content-Type': 'application/json'
     }
 });
 
-const cardsApi = new Api({
-    url: 'https://mesto.nomoreparties.co/v1/cohort-14/cards/', 
-    headers: {
-        authorization: '3264da94-6a0d-46bd-9eaf-c8758f7396fd',
-        'Content-Type': 'application/json'
-    }
-});
-
-const likeApi = new Api({
-    url: 'https://mesto.nomoreparties.co/v1/cohort-14/cards/likes/', 
-    headers: {
-        authorization: '3264da94-6a0d-46bd-9eaf-c8758f7396fd',
-        'Content-Type': 'application/json'
-    }
-});
-
-const userAvatarApi = new Api({
-    url: 'https://mesto.nomoreparties.co/v1/cohort-14/users/me/avatar', 
-    headers: {
-        authorization: '3264da94-6a0d-46bd-9eaf-c8758f7396fd',
-        'Content-Type': 'application/json'
-    }
-});
-
-export {userApi, cardsApi, likeApi, userAvatarApi}
+export {api}
